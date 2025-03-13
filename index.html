@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://vk.com/js/api/vkapi.js"></script>
     <script>
         function onVkApiLoad() {
             document.getElementById('status').innerText = 'VK API загружен, инициализация...';
@@ -18,16 +17,24 @@
             });
         }
 
-        function onVkApiError() {
-            document.getElementById('status').innerText = 'Ошибка загрузки vkapi.js';
-            console.error('Не удалось загрузить vkapi.js');
+        function onVkApiError(error) {
+            document.getElementById('status').innerText = 'Ошибка загрузки vkapi.js: ' + error.message;
+            console.error('Не удалось загрузить vkapi.js:', error);
         }
     </script>
+    <script>
+        try {
+            document.getElementById('status').innerText = 'Попытка загрузки vkapi.js...';
+            console.log('Начинаем загрузку vkapi.js');
+        } catch (e) {
+            console.error('Ошибка перед загрузкой:', e);
+        }
+    </script>
+    <script src="https://vk.com/js/api/vkapi.js" onload="onVkApiLoad()" onerror="onVkApiError(event)"></script>
 </head>
 <body>
     <button onclick="startBot()" disabled id="startButton">Получить консультацию</button>
     <div id="status">Загрузка VK API...</div>
-    <script src="https://vk.com/js/api/vkapi.js" onload="onVkApiLoad()" onerror="onVkApiError()"></script>
     <script>
         function startBot() {
             document.getElementById('status').innerText = 'Получение user_id...';
