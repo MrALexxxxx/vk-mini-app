@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <script>
+        async function startBot() {
+            try {
+                const user = await bridge.send("VKWebAppGetUserInfo");
+                const userId = user.id;
+                
+                document.getElementById('status').innerText = 'Отправка запроса на сервер...';
+                
+                await fetch("https://yourserver.com/start_bot", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ user_id: userId })
+                });
+                
+                document.getElementById('status').innerText = 'Бот запущен!';
+            } catch (error) {
+                console.error("Ошибка запуска бота:", error);
+                document.getElementById('status').innerText = 'Ошибка запуска бота';
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            bridge.send("VKWebAppInit");
+            document.getElementById("startButton").disabled = false;
+        });
+    </script>
+</head>
+<body>
+    <button onclick="startBot()" id="startButton">Получить консультацию</button>
+    <div id="status">Готов к запуску</div>
+</body>
+</html>
