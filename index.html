@@ -1,0 +1,61 @@
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VK Mini App</title>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+      }
+      .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ccc;
+        text-align: center;
+      }
+      .button {
+        background-color: #4267b2;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .button :hover {
+        background-color: #3b5998;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>VK Mini App</h1>
+      <button id="startConsultationButton" class="button">получить Консультацию</button>
+    </div>
+    <script>
+      document.getElementById("startConsultationButton").addEventListener("click", function() {
+        const community_id = -12345678; // Замените на ID вашего сообщества
+        const random_id = Math.floor(Math.random() * 1000000000); // Генерация случайного ID
+
+        vkBridge.send("VKWebAppCallAPIMethod", {
+          method: "messages.send",
+          params: {
+            peer_id: community_id,
+            message: "Start consultation",
+            random_id: random_id
+          }
+        }).then(() => {
+          window.location = `https://vk.com/write?to=${community_id}`; // Открыть чат
+        }).catch(error => {
+          console.error(error);
+        });
+      });
+    </script>
+  </body>
+</html>
